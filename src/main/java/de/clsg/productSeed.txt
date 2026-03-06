@@ -1,0 +1,10 @@
+129.99;12;Bosch;Werkzeuge;4001234567895;P001;Akkuschrauber 18V
+12.49;55;Stanley;Handwerkzeug;4002345678901;P002;Hammer 300g
+34.90;20;Wera;Befestigung;4003456789017;P003;Schraubenset 200tlg
+9.99;80;Fischer;Befestigung;4004567890123;P004;Dübel-Set 100tlg
+6.49;65;Pattex;Bauchemie;4005678901239;P005;Silikon Weiss 310ml
+3.99;100;Tesa;Malerbedarf;4006789012345;P006;Abdeckfolie 4x5m
+39.95;18;Alpina;Farben;4007890123451;P007;Wandfarbe Weiss 10L
+14.99;40;Brennenstuhl;Elektro;4008901234567;P008;Verlängerungskabel 10m
+7.49;70;3M;Schleifen;4009012345673;P009;Schleifpapier Set
+29.99;25;Gardena;Garten;4000123456789;P010;Gartenschlauch 20m
