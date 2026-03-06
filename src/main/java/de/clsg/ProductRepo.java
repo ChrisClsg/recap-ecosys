@@ -15,9 +15,6 @@ public class ProductRepo {
   }
 
   public List<Product> getAll() {
-    System.out.println("######## List of all products ########");
-    products.forEach(p -> System.out.println(p));
-    System.out.println("######################################");
     return products;
   }
 
