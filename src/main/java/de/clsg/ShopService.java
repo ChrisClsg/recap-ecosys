@@ -39,4 +39,8 @@ public class ShopService {
 
     return or.save(order);
   }
+
+  public Order updateOrderStatus(Order order, OrderStatus newStatus) {
+    return or.save(order.withStatus(newStatus));
+  }
 }

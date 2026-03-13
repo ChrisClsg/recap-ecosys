@@ -55,4 +55,16 @@ class ShopServiceTest {
     assertEquals(0, or.getAll().size());
     assertEquals(validProduct.stock(), pr.getById("P001").stock());
   }
+
+  @Test
+  void updateOrderStatus_savesAndReturnsUpdatedOrder_whenGivenValidOrderStatus() {
+    pr.addProduct(validProduct);
+    Order o = shop.placeOrder(5, "P001");
+
+    assertEquals(OrderStatus.PROCESSING, o.status());
+    Order updatedO = shop.updateOrderStatus(o, OrderStatus.IN_DELIVERY);
+
+    assertEquals(OrderStatus.IN_DELIVERY, updatedO.status());
+    assertEquals(or.getById(o.id()), updatedO);
+  }
 }
