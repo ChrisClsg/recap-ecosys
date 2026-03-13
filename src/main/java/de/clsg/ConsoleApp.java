@@ -8,7 +8,7 @@ public class ConsoleApp {
     ProductRepo pr = new ProductRepo();
     Seeder.seed(pr);
 
-    OrderRepoInterface or = new OrderMapRepo();
+    OrderMapRepo or = new OrderMapRepo();
     ShopService shop = new ShopService(pr, or);
 
     Scanner sc = new Scanner(System.in);
@@ -93,11 +93,30 @@ public class ConsoleApp {
           }
 
           case "orders" -> {
+            if (parts.length != 1 && parts.length != 2) {
+              System.out.println(Ansi.warn("usage: orders (Optional: <ORDERSTATUS: PROCESSING | IN_DELIVERY | COMPLETED>)"));
+              break;
+            }
             System.out.println(Ansi.title("Orders"));
-            if (or.getAll().isEmpty()) {
-              System.out.println(Ansi.warn("no orders yet"));
+            if (parts.length == 1) {
+              if (or.getAll().isEmpty()) {
+                System.out.println(Ansi.warn("no orders yet"));
+              } else {
+                or.getAll().forEach(o -> System.out.println(" - " + Ansi.info(o.id()) + " | " + o.productId() + " x " + o.quantity() + " | " + o.status() + " | " + o.createdAt()));
+              }
             } else {
-              or.getAll().forEach(o -> System.out.println(" - " + Ansi.info(o.id()) + " | " + o.productId() + " x " + o.quantity() + " | " + o.status() + " | " + o.createdAt()));
+              try {
+                OrderStatus status = OrderStatus.valueOf(parts[1].toUpperCase());
+
+                if (or.getAllWithStatus(status).isEmpty()) {
+                  System.out.println(Ansi.warn("no orders with this status"));
+                } else {
+                  or.getAllWithStatus(status).forEach(o -> System.out.println(" - " + Ansi.info(o.id()) + " | " + o.productId() + " x " + o.quantity() + " | " + o.status() + " | " + o.createdAt()));
+                }
+              } catch (IllegalArgumentException e) {
+                System.out.println(Ansi.err("invalid status: ") + parts[2]);
+                System.out.println("Allowed: " + java.util.Arrays.toString(OrderStatus.values()));
+              }
             }
           }
 
@@ -148,7 +167,7 @@ Commands:
   order <productId> <qty>
   receive <productId> <qty>
   ship <productId> <qty>
-  orders
+  orders (Optional: <ORDERSTATUS: PROCESSING | IN_DELIVERY | COMPLETED>)
   updateorderstatus <orderId> <NEW_STATUS> (PROCESSING, IN_DELIVERY, COMPLETED)
   exit
 """);
