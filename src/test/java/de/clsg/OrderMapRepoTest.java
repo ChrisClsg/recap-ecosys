@@ -39,8 +39,8 @@ class OrderMapRepoTest {
   }
 
   @Test
-  void addOrder_addsOrder_soGetAllContainsIt() {
-    or.addOrder(o1);
+  void save_putsOrder_soGetAllContainsIt() {
+    or.save(o1);
 
     List<Order> all = or.getAll();
     assertEquals(1, all.size());
@@ -49,15 +49,15 @@ class OrderMapRepoTest {
 
   @Test
   void getById_returnsNull_whenNotFound() {
-    or.addOrder(o1);
+    or.save(o1);
 
     assertNull(or.getById("does-not-exist"));
   }
 
   @Test
   void getById_returnsOrder_whenFound() {
-    or.addOrder(o1);
-    or.addOrder(o2);
+    or.save(o1);
+    or.save(o2);
 
     Order found = or.getById(o2.id());
     assertNotNull(found);
@@ -68,7 +68,7 @@ class OrderMapRepoTest {
 
   @Test
   void removeOrderById_returnsFalse_whenNotFound() {
-    or.addOrder(o1);
+    or.save(o1);
 
     assertFalse(or.removeOrderById("nope"));
     assertEquals(1, or.getAll().size());
@@ -76,8 +76,8 @@ class OrderMapRepoTest {
 
   @Test
   void removeOrderById_removesOrder_andReturnsTrue_whenFound() {
-    or.addOrder(o1);
-    or.addOrder(o2);
+    or.save(o1);
+    or.save(o2);
 
     assertTrue(or.removeOrderById(o1.id()));
 

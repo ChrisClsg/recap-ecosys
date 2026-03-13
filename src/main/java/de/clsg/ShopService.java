@@ -36,7 +36,7 @@ public class ShopService {
       UUID.randomUUID().toString(),
       productId
     );
-    or.addOrder(order);
-    return order;
+
+    return or.save(order);
   }
 }

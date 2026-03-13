@@ -6,8 +6,16 @@ import java.util.List;
 public class OrderListRepo implements OrderRepoInterface {
   private List<Order> orders = new ArrayList<>();
 
-  public void addOrder(Order order) {
+  public Order save(Order order) {
+    for (int i = 0; i < orders.size(); i++) {
+      if(orders.get(i).id().equals(order.id())) {
+        orders.set(i, order);
+        return order;
+      }
+    }
+
     orders.add(order);
+    return order;
   }
 
   public boolean removeOrderById(String id) {

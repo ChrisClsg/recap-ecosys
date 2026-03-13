@@ -8,8 +8,9 @@ import java.util.Map;
 public class OrderMapRepo implements OrderRepoInterface {
   private Map<String, Order> orders = new HashMap<>();
 
-  public void addOrder(Order order) {
+  public Order save(Order order) {
     orders.put(order.id(), order);
+    return order;
   }
 
   public boolean removeOrderById(String id) {

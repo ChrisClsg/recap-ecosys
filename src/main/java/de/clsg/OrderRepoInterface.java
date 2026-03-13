@@ -6,5 +6,5 @@ public interface OrderRepoInterface {
   public boolean removeOrderById(String id);
   public List<Order> getAll();
   public Order getById(String id);
-  public void addOrder(Order order);
+  public Order save(Order order);
 }
