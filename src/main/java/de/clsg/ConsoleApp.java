@@ -1,5 +1,6 @@
 package de.clsg;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -146,6 +147,19 @@ public class ConsoleApp {
             }
           }
 
+          case "oldestorders" -> {
+            if (parts.length != 1) {
+              System.out.println(Ansi.warn("usage: oldestorders"));
+              break;
+            }
+
+            Map<OrderStatus, Order> map = or.getOldestOrderPerStatus();
+            map.forEach((key, val) -> {
+              System.out.println(Ansi.title("Oldest " + key + " order: "));
+              System.out.println(" - " + Ansi.info(val.id()) + " | " + val.productId() + " x " + val.quantity() + " | " + val.status() + " | " + val.createdAt());
+            });
+          }
+
           case "exit" -> {
             System.out.println(Ansi.ok("bye"));
             sc.close();
@@ -171,6 +185,7 @@ Commands:
   receive <productId> <qty>
   ship <productId> <qty>
   orders (Optional: <ORDERSTATUS: PROCESSING | IN_DELIVERY | COMPLETED>)
+  oldestorders
   updateorderstatus <orderId> <NEW_STATUS> (PROCESSING, IN_DELIVERY, COMPLETED)
   exit
 """);
