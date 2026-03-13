@@ -25,7 +25,7 @@ class ShopServiceTest {
 
     Order o = shop.placeOrder(3, "P001");
 
-    assertEquals(7, pr.getById("P001").stock());
+    assertEquals(7, pr.getById("P001").get().stock());
     // Assertions for correct order creation
     assertNotNull(o);
     assertEquals(1, or.getAll().size());
@@ -53,7 +53,7 @@ class ShopServiceTest {
 
     assertNull(o);
     assertEquals(0, or.getAll().size());
-    assertEquals(validProduct.stock(), pr.getById("P001").stock());
+    assertEquals(validProduct.stock(), pr.getById("P001").get().stock());
   }
 
   @Test

@@ -1,6 +1,7 @@
 package de.clsg;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 public class ProductRepo {
@@ -18,8 +19,8 @@ public class ProductRepo {
     return products;
   }
 
-  public Product getById(String id) {
-    return products.stream().filter(p -> p.id().equals(id)).findFirst().orElse(null);
+  public Optional<Product> getById(String id) {
+    return Optional.ofNullable(products.stream().filter(p -> p.id().equals(id)).findFirst().orElse(null));
   }
 
   private boolean updateProduct(Product updated) {
@@ -35,9 +36,11 @@ public class ProductRepo {
 
   public boolean increaseStock(String productId, int amount) {
     if (amount <= 0) return false;
-    Product prod = getById(productId);
-    if (prod == null) return false;
 
+    Optional<Product> prodOpt = getById(productId);
+    if (prodOpt.isEmpty()) return false;
+
+    Product prod = prodOpt.get();
     Product updated = new Product(
       prod.price(),
       prod.stock() + amount,
@@ -53,10 +56,11 @@ public class ProductRepo {
 
   public boolean decreaseStock(String productId, int amount) {
     if (amount <= 0) return false;
-    Product prod = getById(productId);
 
-    if (prod == null || prod.stock() < amount) return false;
+    Optional<Product> prodOpt = getById(productId);
+    if (prodOpt.isEmpty() || prodOpt.get().stock() < amount) return false;
 
+    Product prod = prodOpt.get();
     Product updated = new Product(
       prod.price(),
       prod.stock() - amount,

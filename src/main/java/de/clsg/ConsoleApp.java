@@ -43,26 +43,28 @@ public class ConsoleApp {
 
           case "product" -> {
             if (parts.length != 2) { System.out.println(Ansi.warn("usage: product <id>")); break; }
-            Product p = pr.getById(parts[1]);
-            if (p == null) {
-              System.out.println(Ansi.err("not found: ") + parts[1]);
-            } else {
-              System.out.println(Ansi.title("Produkt"));
-              System.out.println(p);
-            }
+
+            pr.getById(parts[1]).ifPresentOrElse(
+              p -> {
+                System.out.println(Ansi.title("Produkt"));
+                System.out.println(p);
+              },
+              () -> System.out.println(Ansi.err("not found: ") + parts[1])
+            );
           }
 
           case "stock" -> {
             if (parts.length != 2) { System.out.println(Ansi.warn("usage: stock <id>")); break; }
-            Product p = pr.getById(parts[1]);
-            if (p == null) {
-              System.out.println(Ansi.err("not found: ") + parts[1]);
-            } else {
-              String badge = (p.stock() == 0)
-                  ? Ansi.err("OUT")
-                  : (p.stock() < 5 ? Ansi.warn("LOW") : Ansi.ok("OK"));
-              System.out.println("stock=" + p.stock() + " " + badge);
-            }
+
+            pr.getById(parts[1]).ifPresentOrElse(
+              p -> {
+                String badge = (p.stock() == 0)
+                ? Ansi.err("OUT")
+                : (p.stock() < 5 ? Ansi.warn("LOW") : Ansi.ok("OK"));
+                System.out.println("stock=" + p.stock() + " " + badge);
+              },
+              () -> System.out.println(Ansi.err("not found: ") + parts[1])
+            );
           }
 
           case "order" -> {

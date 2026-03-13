@@ -1,6 +1,7 @@
 package de.clsg;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ShopService {
@@ -17,8 +18,8 @@ public class ShopService {
       throw new IllegalArgumentException("Quantity must be > 0");
     }
 
-    Product p = pr.getById(productId);
-    if (p == null) {
+    Optional<Product> pOpt = pr.getById(productId);
+    if (pOpt.isEmpty()) {
       System.out.println("Product with ID " + productId + " not found.");
       return null;
     }

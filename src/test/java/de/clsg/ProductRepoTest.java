@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ public class ProductRepoTest {
     boolean ok = pr.decreaseStock("P001", 999);
     assertFalse(ok);
 
-    Product still = pr.getById("P001");
+    Product still = pr.getById("P001").orElseThrow();
     assertEquals(12, still.stock());
   }
 
@@ -70,28 +71,29 @@ public class ProductRepoTest {
     boolean bool = pr.decreaseStock(id, 10);
     assertTrue(bool);
 
-    Product updated = pr.getById(id);
+    Product updated = pr.getById(id).orElseThrow();
     assertEquals(stockBefore - 10, updated.stock());
   }
 
   @Test
-  void getById_returnsNull_whenRepoEmpty() {
-    assertNull(pr.getById("P001"));
+  void getById_returnsEmptyOptional_whenRepoEmpty() {
+    assertTrue(pr.getById("P001").isEmpty());
   }
 
   @Test
-  void getById_returnsNull_whenIdNotFound() {
+  void getById_returnsEmptyOptional_whenIdNotFound() {
     pr.addProduct(prod1);
-    assertNull(pr.getById("DOES_NOT_EXIST"));
+    assertTrue(pr.getById("DOES_NOT_EXIST").isEmpty());
   }
 
   @Test
   void getById_returnsProduct_whenIdExists() {
     pr.addProduct(prod1);
-    Product found = pr.getById("P001");
-    assertNotNull(found);
-    assertEquals("P001", found.id());
-    assertEquals(prod1, found);
+    Optional<Product> found = pr.getById("P001");
+
+    assertFalse(found.isEmpty());
+    assertEquals("P001", found.get().id());
+    assertEquals(prod1, found.get());
   }
 
   @Test
@@ -107,7 +109,7 @@ public class ProductRepoTest {
 
     pr.increaseStock(id, 10);
 
-    Product updated = pr.getById(id);
+    Product updated = pr.getById(id).orElseThrow();
     assertEquals(stockBefore + 10, updated.stock());
   }
 
@@ -125,7 +127,7 @@ public class ProductRepoTest {
 
     assertTrue(pr.removeProductById("P001"));
     assertEquals(1, pr.getAll().size());
-    assertNull(pr.getById("P001"));
-    assertNotNull(pr.getById("P002"));
+    assertTrue(pr.getById("P001").isEmpty());
+    assertFalse(pr.getById("P002").isEmpty());
   }
 }
