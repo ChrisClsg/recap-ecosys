@@ -146,6 +146,7 @@ public class ConsoleApp {
 
           case "exit" -> {
             System.out.println(Ansi.ok("bye"));
+            sc.close();
             return;
           }
 
