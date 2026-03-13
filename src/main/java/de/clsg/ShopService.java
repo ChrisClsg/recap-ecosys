@@ -20,8 +20,7 @@ public class ShopService {
 
     Optional<Product> pOpt = pr.getById(productId);
     if (pOpt.isEmpty()) {
-      System.out.println("Product with ID " + productId + " not found.");
-      return null;
+      throw(new IllegalArgumentException("Product with ID " + productId + " not found."));
     }
 
     boolean ok = pr.decreaseStock(productId, quantity);

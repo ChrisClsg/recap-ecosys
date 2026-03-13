@@ -38,10 +38,8 @@ class ShopServiceTest {
   }
 
   @Test
-  void placeOrder_returnsNull_whenProductNotFound() {
-    Order o = shop.placeOrder(1, "NOPE");
-
-    assertNull(o);
+  void placeOrder_throwsIllegalArgument_whenProductNotFound() {
+    assertThrows(IllegalArgumentException.class, () -> shop.placeOrder(1, "NOPE"));
     assertEquals(0, or.getAll().size());
   }
 
