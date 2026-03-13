@@ -1,19 +1,27 @@
 package de.clsg;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShopServiceTest {
+  private ProductRepo pr;
+  private OrderListRepo or;
+  private ShopService shop;
+  private Product validProduct;
+
+  @BeforeEach
+  void setUp() {
+    pr = new ProductRepo();
+    or = new OrderListRepo();
+    shop = new ShopService(pr, or);
+    validProduct = new Product(new BigDecimal("10.00"), 10, "Bosch", "Werkzeuge", "400...", "P001", "Akkuschrauber");
+  }
 
   @Test
   void placeOrder_success_reducesStock_andStoresOrder() {
-    ProductRepo pr = new ProductRepo();
-    Product prod = new Product(new BigDecimal("10.00"), 10, "Bosch", "Werkzeuge", "400...", "P001", "Akkuschrauber");
-    pr.addProduct(prod);
-
-    OrderListRepo or = new OrderListRepo();
-    ShopService shop = new ShopService(pr, or);
+    pr.addProduct(validProduct);
 
     Order o = shop.placeOrder(3, "P001");
 
@@ -31,10 +39,6 @@ class ShopServiceTest {
 
   @Test
   void placeOrder_returnsNull_whenProductNotFound() {
-    ProductRepo pr = new ProductRepo();
-    OrderListRepo or = new OrderListRepo();
-    ShopService shop = new ShopService(pr, or);
-
     Order o = shop.placeOrder(1, "NOPE");
 
     assertNull(o);
@@ -43,17 +47,12 @@ class ShopServiceTest {
 
   @Test
   void placeOrder_returnsNull_whenNotEnoughStock() {
-    ProductRepo pr = new ProductRepo();
-    Product prod = new Product(new BigDecimal("10.00"), 2, "Bosch", "Werkzeuge", "400...", "P001", "Akkuschrauber");
-    pr.addProduct(prod);
+    pr.addProduct(validProduct);
 
-    OrderListRepo or = new OrderListRepo();
-    ShopService shop = new ShopService(pr, or);
-
-    Order o = shop.placeOrder(5, "P001");
+    Order o = shop.placeOrder(100, "P001");
 
     assertNull(o);
     assertEquals(0, or.getAll().size());
-    assertEquals(2, pr.getById("P001").stock());
+    assertEquals(validProduct.stock(), pr.getById("P001").stock());
   }
 }
