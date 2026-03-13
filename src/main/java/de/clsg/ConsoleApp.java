@@ -97,7 +97,31 @@ public class ConsoleApp {
             if (or.getAll().isEmpty()) {
               System.out.println(Ansi.warn("no orders yet"));
             } else {
-              or.getAll().forEach(o -> System.out.println(" - " + Ansi.info(o.id()) + " | " + o.productId() + " x " + o.quantity()));
+              or.getAll().forEach(o -> System.out.println(" - " + Ansi.info(o.id()) + " | " + o.productId() + " x " + o.quantity() + " | " + o.status() + " | " + o.createdAt()));
+            }
+          }
+
+          case "updateorderstatus" -> {
+            if (parts.length != 3) {
+              System.out.println(Ansi.warn("usage: updateorderstatus <id> <newStatus>"));
+              break;
+            }
+
+            try {
+              OrderStatus newStatus = OrderStatus.valueOf(parts[2].toUpperCase());
+              Order o = or.getById(parts[1]);
+
+              Order updated = shop.updateOrderStatus(o, newStatus);
+
+              if (updated == null) {
+                System.out.println(Ansi.err("not found: ") + parts[1]);
+              } else {
+                System.out.println(Ansi.title("Order updated to:"));
+                System.out.println(updated);
+              }
+            } catch (IllegalArgumentException e) {
+              System.out.println(Ansi.err("invalid status: ") + parts[2]);
+              System.out.println("Allowed: " + java.util.Arrays.toString(OrderStatus.values()));
             }
           }
 
@@ -125,6 +149,7 @@ Commands:
   receive <productId> <qty>
   ship <productId> <qty>
   orders
+  updateorderstatus <orderId> <NEW_STATUS> (PROCESSING, IN_DELIVERY, COMPLETED)
   exit
 """);
   }
