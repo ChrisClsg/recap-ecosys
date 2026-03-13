@@ -1,9 +1,12 @@
 package de.clsg;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 public class OrderMapRepo implements OrderRepoInterface {
   private Map<String, Order> orders = new HashMap<>();
@@ -25,6 +28,15 @@ public class OrderMapRepo implements OrderRepoInterface {
     return orders.values().stream()
       .filter(o -> o.status() == status)
       .toList();
+  }
+
+  public Map<OrderStatus, Order> getOldestOrderPerStatus() {
+    return orders.values().stream()
+      .collect(Collectors.toMap(
+        Order::status,
+        o -> o,
+        BinaryOperator.minBy(Comparator.comparing(Order::createdAt))
+      ));
   }
 
   public Order getById(String id) {
