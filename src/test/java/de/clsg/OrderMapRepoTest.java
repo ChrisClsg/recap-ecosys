@@ -2,7 +2,9 @@ package de.clsg;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +17,20 @@ class OrderMapRepoTest {
   @BeforeEach
   void setUp() {
     or = new OrderMapRepo();
-    o1 = new Order(2, "P001");
-    o2 = new Order(1, "P002");
+    o1 = new Order(
+      Instant.now(),
+      2,
+      OrderStatus.PROCESSING,
+      UUID.randomUUID().toString(),
+      "P001"
+    );
+    o2 = new Order(
+      Instant.now(),
+      1,
+      OrderStatus.PROCESSING,
+      UUID.randomUUID().toString(),
+      "P002"
+    );
   }
 
   @Test

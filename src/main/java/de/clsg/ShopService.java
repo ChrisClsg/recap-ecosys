@@ -1,5 +1,8 @@
 package de.clsg;
 
+import java.time.Instant;
+import java.util.UUID;
+
 public class ShopService {
   private final ProductRepo pr;
   private final OrderRepoInterface or;
@@ -26,7 +29,13 @@ public class ShopService {
       return null;
     }
 
-    Order order = new Order(quantity, productId);
+    Order order = new Order(
+      Instant.now(),
+      quantity,
+      OrderStatus.PROCESSING,
+      UUID.randomUUID().toString(),
+      productId
+    );
     or.addOrder(order);
     return order;
   }

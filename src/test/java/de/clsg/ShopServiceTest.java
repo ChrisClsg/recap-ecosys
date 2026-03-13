@@ -17,9 +17,16 @@ class ShopServiceTest {
 
     Order o = shop.placeOrder(3, "P001");
 
+    assertEquals(7, pr.getById("P001").stock());
+    // Assertions for correct order creation
     assertNotNull(o);
     assertEquals(1, or.getAll().size());
-    assertEquals(7, pr.getById("P001").stock());
+    assertEquals(3, o.quantity());
+    assertEquals("P001", o.productId());
+    assertEquals(OrderStatus.PROCESSING, o.status());
+    assertNotNull(o.createdAt());
+    assertNotNull(o.id());
+    assertFalse(o.id().isBlank());
   }
 
   @Test
