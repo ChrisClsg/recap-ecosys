@@ -21,6 +21,12 @@ public class OrderMapRepo implements OrderRepoInterface {
     return new ArrayList<>(orders.values());
   }
 
+  public List<Order> getAllWithStatus(OrderStatus status) {
+    return orders.values().stream()
+      .filter(o -> o.status() == status)
+      .toList();
+  }
+
   public Order getById(String id) {
     return orders.get(id);
   }

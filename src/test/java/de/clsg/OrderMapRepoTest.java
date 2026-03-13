@@ -85,4 +85,13 @@ class OrderMapRepoTest {
     assertNull(or.getById(o1.id()));
     assertNotNull(or.getById(o2.id()));
   }
+
+  @Test
+  void getAllWithStatus_onlyReturnsOrders_withGivenOrderStatus() {
+    or.save(o1.withStatus(OrderStatus.PROCESSING));
+    o2 = o2.withStatus(OrderStatus.COMPLETED);
+    or.save(o2);
+
+    assertEquals(List.of(o2), or.getAllWithStatus(OrderStatus.COMPLETED));
+  }
 }
